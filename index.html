@@ -1,44 +1,64 @@
+</html>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="https://img.freepik.com/vector-premium/hombres-soplando-globos-signo-dolar-dolar-inflado-aumento-inflacion-poder-adquisitivo-reducido_368936-218.jpg?w=2000" type="image/x-icon">
-    <title>Infla2 : Calculadora de inflacion</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    header, footer {
-      background-color: #f2f2f2;
-      padding: 20px;
-      text-align: center;
-      color: #333;
-    }
-    img{
-        border-radius: 50%;
-        width: 25%;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-  </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda de Ski y Snowboard</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
   <header>
-    <h1>Infla2</h1>
+    <nav class="navBar">
+      <div class="logo">
+        <img src="./assets/images/logo.png" alt="Logo de la tienda">
+      </div>
+      <div class="navigation">
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Productos</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="search">
+        <input type="text" placeholder="Buscar productos">
+      </div>
+      <div class="cart">
+        <img src="./assets/images/png-transparent-computer-icons-shopping-cart-encapsulated-postscript-shopping-cart-angle-black-shopping.png" alt="Carrito de compras">
+      </div>
+    </nav>
   </header>
-  <main>
-    <img src="https://img.freepik.com/vector-premium/hombres-soplando-globos-signo-dolar-dolar-inflado-aumento-inflacion-poder-adquisitivo-reducido_368936-218.jpg?w=2000" >
-  </main>
+
+  <section class="hero">
+    <img src="./assets/images/skiingbanner.png" alt="Imagen principal">
+  </section>
+
+  <section class="product-list">
+    <div class="product">
+      <img src="./assets/images/headkore93.jpg" alt="head kore 93">
+      <h3>Head Kore 93</h3>
+      <p>Precio: $300</p>
+    </div>
+    <div class="product">
+      <img src="./assets/images/k2mindbender.jpg" alt="k2 mindbender">
+      <h3>K2 Mindbender</h3>
+      <p>Precio: $250</p>
+    </div>
+    <div class="product">
+      <img src="./assets/images/rossiboescaper.jpg" alt="rossignol escaper">
+      <h3>Rossignol Escaper</h3>
+      <p>Precio: $500</p>
+    </div>
+
+  </section>
 
   <footer>
-    <p>Agustin Pavlovsky | Coderhouse 2023</p>
+    <p>Todos los derechos reservados &copy; 2023</p>
   </footer>
-  <script src="index.js"></script>
+
+  <script src="script.js"></script>
+  
 </body>
 </html>
