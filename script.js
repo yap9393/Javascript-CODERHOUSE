@@ -1,7 +1,8 @@
-let valorDolar = 485
+let valorDolar = 1
+//se establecio valor de dolar 1 solo para tener numeros mas chicos en el simulador.
 
 class Producto {
-    constructor(marca, modelo, rangoEdad, deporte, tamanio, precio, stock) {
+    constructor( marca, modelo, rangoEdad, deporte, tamanio, precio, stock,imagen, alt) {
         this.marca = marca;
         this.modelo = modelo;
         this.rangoEdad = rangoEdad;
@@ -9,6 +10,8 @@ class Producto {
         this.tamanio = tamanio;
         this.precio = parseFloat(precio);
         this.stock = parseFloat(stock);
+        this.imagen=imagen;
+        this.alt='esquies';
     }
     precioEnPesos() {
         return this.precio * valorDolar;
@@ -17,189 +20,217 @@ class Producto {
         return this.precio * valorDolar * 1.21;
     }
     precioDeVenta() {
-        return this.precio * valorDolar * 1.21 * 1.3;
+        return Math.ceil(this.precio * valorDolar * 1.21 * 1.3);
     }
 }
 
-
-// declarar un array vacío para almacenar los productos
 const productos = [];
 
-// función para agregar productos nuevos
-function agregarProducto() {
-    let marca = prompt("Ingrese la marca del producto (Ej: 'ROSSIGNOL' ,'K2', 'HEAD'):");
-    let modelo = prompt("Ingrese el modelo del producto (Ej: 'ESCAPER','MINDBENDER', 'KORE93'):");
-    let rangoEdad = prompt("Ingrese el rango de edad del producto ('ADULTO', 'KIDS'):");
-    let deporte = prompt("Ingrese el deporte del producto ( 'SKI' o 'SNOWBOARD'):");
-    let tamanio;
-    let precio;
-    let stock;
+const producto1 = new Producto("Rossignol", "Escaper", "Adulto", "Ski", "160cm", 450, 6, "../Assets/imagenes tienda/modelorossignolescaper.jpg");
+const producto2 = new Producto("K2", "Mindbender", "Adulto", "Ski", "185cm", 550, 2,  "../Assets/imagenes tienda/modelok2mindbender.jpg");
+const producto3 = new Producto("Head", "Kore93", "Adulto", "Ski", "190cm", 600, 2,  "../Assets/imagenes tienda/modeloheadkore93 (1).jpg");
+const producto4 = new Producto("Blizzard", "Brahma", "Adulto", "Ski", "188cm", 520, 3, "../Assets/imagenes tienda/modeloblizzardbrahma.jpg");
+const producto5 = new Producto("Armada", "Declivity", "Adulto", "Ski", "198cm", 480, 3,  "../Assets/imagenes tienda/modeloarmadadeclivity.jpg");
+const producto6= new Producto ("Black Crows", "Junius", "Niño", "Ski", "85cm", 180, 3,  "../Assets/imagenes tienda/modeloblackcrowsJunius.jpg");
+const producto7 = new Producto("Blizzard", "Bonafide", "Adulto", "Ski", "171cm", 524, 7, "../Assets/imagenes tienda/modeloblizzardbonifide.jpg");
+const producto8 = new Producto("Head", "Kore99", "Adulto", "Ski", "172cm", 630, 2,  "../Assets/imagenes tienda/modeloheadkore99.jpg", "esquies");
+const producto9 = new Producto("Volkl", "Revolt Jr Hopper ", "Niño", "Ski", "128cm", 350, 5,  "../Assets/imagenes tienda/modeloVolklRevolt .jpg");
+const producto10 = new Producto("Salomon", "QST Junior", "Niño", "Ski", "100cm", 390, 3,  "../Assets/imagenes tienda/modelosalomonqstjunior.jpg");
+const producto11 = new Producto("Salomon", "QST", "Adulto", "Ski", "185cm", 590, 6,  "../Assets/imagenes tienda/modelosalomonqst.jpg");
 
-    while (isNaN(tamanio)) {
-        tamanio = parseFloat(prompt("Ingrese el tamaño del producto expresado en cm (Ej: '150', '165', '180'):"));
-        if (isNaN(tamanio)) {
-            alert("El tamaño debe ser un número válido. Inténtelo nuevamente.");
-        }
-    }
+productos.push(producto1, producto2, producto3, producto4, producto5, 
+  producto6, producto7, producto8, producto9, producto10, producto11);
 
-    while (isNaN(precio)) {
-        precio = parseFloat(prompt("Ingrese el precio del producto (valor de compra en USD):"));
-        if (isNaN(precio)) {
-            alert("El precio debe ser un número válido. Inténtelo nuevamente.");
-        }
-    }
+//mostrar productos en dom 
+let contenedorDeProductos = document.getElementById('contenedorDeProductos')
 
-    while (isNaN(stock)) {
-        stock = parseInt(prompt("Ingrese el stock del producto:"));
-        if (isNaN(stock)) {
-            alert("El stock debe ser un número válido. Inténtelo nuevamente.");
-        }
-    }
+function mostrarProductos(arrayProductos) {
+  contenedorDeProductos.innerHTML = '';
+  let fila = document.createElement('div');
+  fila.classList.add('row', 'row-cols-1', 'row-cols-md-4', 'gx-5', 'gy-5');
 
-    // crear un nuevo objeto Producto con los datos ingresados
-    let producto = new Producto(marca, modelo, rangoEdad, deporte, tamanio, precio, stock);
-
-    // agregar el producto al array productos
-    productos.push(producto);
+  for (let producto of arrayProductos) {
+    let contenedor = document.createElement('div');
+    contenedor.classList.add('col', 'col-sm-12', 'col-md-6', 'col-lg-4', 'col-xl-3');
+    contenedor.innerHTML = `
+      <div class="card h-100">
+        <img src="${producto.imagen}" class="card-img-top image-tienda" alt="${producto.alt}">
+        <div class="card-body">
+          <h3 class="card-title">${producto.marca}</h3>
+          <p class="card-text">${producto.modelo}</p>
+          <p class="card-text">${producto.tamanio}</p>
+        </div>
+        <div class="card-footer">
+          <p class="pkg-price">$ ${producto.precioDeVenta()}</p>
+          <a href="#"><button class="btn btn-danger boton btn-rental btn-add-cart" type="button">Agregar al carrito</button></a>
+        </div>
+      </div>`;
+    fila.appendChild(contenedor);
+  }
+  contenedorDeProductos.appendChild(fila);
 }
 
-// bucle para agregar productos hasta que el usuario escriba "ESC"
-let agregarMas = true;
-while (agregarMas) {
-    let opcion = prompt("¿Desea agregar un nuevo producto? (Ingrese 'ESC' para terminar)");
-    if (opcion.toLowerCase() === "esc") {
-        agregarMas = false;
+function mostrarTodo() {
+  mostrarProductos(productos);
+}
+
+// ordenar por precio
+let botonOrdenarPrecio = document.querySelector('.ordenar-precio');
+botonOrdenarPrecio.addEventListener('click', ordenarPorPrecioClick);
+
+function ordenarPorPrecioClick() {
+  productos.sort((a, b) => a.precio - b.precio);
+  mostrarProductos(productos);
+}
+
+// mostrar todo
+let botonMostrarTodo= document.querySelector('.mostrar-todo');
+botonMostrarTodo.addEventListener('click', mostrarTodo);
+
+// funcion para mostrar las opciones de marcas en la barra lateral
+let marcaSidebar = document.getElementById('marcaSidebar');
+
+function mostrarOpcionesMarcas() {
+  let marcasUnicas = [...new Set(productos.map(producto => producto.marca))];
+  marcaSidebar.innerHTML = '';
+  marcasUnicas.forEach(marca => {
+    let li = document.createElement('li'); 
+    li.innerText = marca; 
+    li.classList.add('marca-option');
+    marcaSidebar.appendChild(li);
+  });
+};
+
+// funcion para mostrar las opciones de rango de edad en la barra lateral
+let edadSidebar = document.getElementById('edadSidebar');
+
+function mostrarOpcionesEdad() {
+  let edadesUnicas = [...new Set(productos.map(producto => producto.rangoEdad))];
+  edadSidebar.innerHTML = '';
+  edadesUnicas.forEach(edad => {
+    let li = document.createElement('li');
+    li.innerText = edad;
+    li.classList.add('edad-option');
+    edadSidebar.appendChild(li);
+  });
+};
+
+// funcion para manejar los clics en las opciones de filtrado
+marcaSidebar.addEventListener('click', respuestaClick);
+edadSidebar.addEventListener('click', respuestaClick);
+
+function respuestaClick(event) {
+  let opcion = event.target.textContent; //consigo el texto del elemento que clickeo
+  let filtro = event.target.parentNode.id; //consigo el id del elemento padre (para saber si filtro x marca o edad)
+
+  if (filtro === 'marcaSidebar') {
+    let arrayFiltrado = productos.filter(producto => producto.marca.toLowerCase() === opcion.toLowerCase());
+    mostrarProductos(arrayFiltrado);
+  } else if (filtro === 'edadSidebar') {
+    let arrayFiltrado = productos.filter(producto => producto.rangoEdad.toLowerCase() === opcion.toLowerCase());
+    mostrarProductos(arrayFiltrado);
+  }
+};
+
+// carrito
+// funciones para obtener y guardar el carrito en el Local Storage.
+let carrito = [];
+function getCarritoFromLocalStorage() {
+  const carritoString = localStorage.getItem('carrito');
+  return carritoString ? JSON.parse(carritoString) : [];
+};
+
+function guardarCarritoEnLS() {
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+};
+
+function buscarProductoEnCarrito(nombreProducto) {
+  return carrito.find((producto) => producto.nombre === nombreProducto);
+};
+
+contenedorDeProductos.addEventListener('click', (event) => {
+  if (event.target.classList.contains('btn-add-cart')) {
+    const card = event.target.closest('.card');
+    const nombre = card.querySelector('.card-title').textContent;
+    const modelo = card.querySelector('.card-text:nth-child(2)').textContent;
+    const precio = parseFloat(card.querySelector('.pkg-price').textContent.replace('$', ''));
+    
+    let productoEnCarrito = buscarProductoEnCarrito(nombre);
+    if (productoEnCarrito) {
+      productoEnCarrito.cantidad += 1;
     } else {
-        agregarProducto();
+      productoEnCarrito = {
+        nombre,
+        modelo,
+        precioVenta: precio,
+        cantidad: 1,
+      };
+      carrito.push(productoEnCarrito);
     }
-}
-
-
-// mostrar los productos agregados
-console.log(productos);
-
-// crear un nuevo array con los precios en pesos
-let productosEnPesos = productos.map((producto) => {
-    return {
-        marca: producto.marca,
-        modelo: producto.modelo,
-        rangoEdad: producto.rangoEdad,
-        deporte: producto.deporte,
-        tamanio: producto.tamanio,
-        precio: Math.ceil(producto.precioEnPesos()),
-        stock: producto.stock
-    }
+    guardarCarritoEnLS();
+    Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado al carrito',
+      })
+    mostrarCarrito(carrito);
+    mostrarCantidadCarrito();
+  }
 });
 
-console.log(productosEnPesos)
+// funcion para eliminar un producto del carrito
+function eliminarProductoDelCarrito(nombreProducto) {
+  carrito = carrito.filter((producto) => producto.nombre !== nombreProducto);
+  guardarCarritoEnLS();
+  mostrarCarrito(carrito);
+  mostrarCantidadCarrito();
+};
 
-//crear un nuevo array con los precios en pesos mas IVA
-let productosEnPesosMasIVA = productos.map((producto) => {
-    return {
-        marca: producto.marca,
-        modelo: producto.modelo,
-        rangoEdad: producto.rangoEdad,
-        deporte: producto.deporte,
-        tamanio: producto.tamanio,
-        precio: Math.ceil(producto.sumarIva()),
-        stock: producto.stock
-    }
+// funcion para mostrar la cantidad de productos en el carrito
+function mostrarCantidadCarrito() {
+  const cantidadCarrito = document.getElementById('cantidadCarrito');
+  cantidadCarrito.textContent = carrito.reduce((total, producto) => total + producto.cantidad, 0);
+};
+
+// funcion para mostrar el carrito en su dropdown
+function mostrarCarrito(arrayCarrito) {
+  const productosCarritoContainer = document.getElementById('productosCarrito');
+  productosCarritoContainer.innerHTML = '';
+  let totalCarrito = 0;
+
+  for (let producto of arrayCarrito) {
+    const productoElement = document.createElement('div');
+    productoElement.classList.add('carrito-item');
+    productoElement.innerHTML = `
+      <span class="nombre">${producto.nombre}</span>
+      <span class="modelo">${producto.modelo} </span>
+      <span>|</span>
+      <span class="cantidad"> x ${producto.cantidad} </span>
+      <span>|</span>
+      <span class="precio"> $${(producto.precioVenta * producto.cantidad).toFixed(2)}</span>
+      <button class="btn btn-danger btn-eliminar" data-nombre="${producto.nombre}">Eliminar</button>
+    `;
+
+    //evento del boton eliminar 
+    productoElement.querySelector('.btn-eliminar').addEventListener('click', (event) => {
+      const nombreProducto = event.target.dataset.nombre;
+      eliminarProductoDelCarrito(nombreProducto);
+    });
+    productosCarritoContainer.appendChild(productoElement);
+    totalCarrito += producto.precioVenta * producto.cantidad;
+  };
+
+  //mostrar total del carrito
+  document.querySelector('.total-precio').textContent = `$${totalCarrito.toFixed(2)}`;
+};
+
+//al cargar la pag obtengo el carrito que esta en LS y lo muestro en su dropdown
+document.addEventListener('DOMContentLoaded', () => {
+  carrito = getCarritoFromLocalStorage();
+  mostrarCarrito(carrito);
+  mostrarCantidadCarrito();
 });
 
-console.log(productosEnPesosMasIVA)
-
-// busqueda de productos 
-
-let categoriaBusqueda = prompt('Por qué categoría desea buscar? (disponible: "MARCA", "MODELO", "EDAD", "DEPORTE")');
-let arrayFiltrado;
-let palabraFiltrada;
-
-while (categoriaBusqueda !== 'MARCA' && categoriaBusqueda !== 'MODELO' && categoriaBusqueda !== 'EDAD' && categoriaBusqueda !== 'DEPORTE') {
-    alert('Categoría no válida');
-    categoriaBusqueda = prompt('Por qué categoría desea buscar? (disponible: "MARCA", "MODELO", "EDAD", "DEPORTE")');
-}
-
-switch (categoriaBusqueda) {
-    case 'MARCA':
-        palabraFiltrada = prompt("Ingrese la marca que desea buscar (Ej: 'ROSSIGNOL' ,'K2', 'HEAD'). El resultado se verá en consola.");
-        arrayFiltrado = productos.filter(producto => producto.marca.includes(palabraFiltrada));
-        break;
-    case 'MODELO':
-        palabraFiltrada = prompt("Ingrese el modelo que desea buscar (Ej: 'ESCAPER','MINDBENDER', 'KORE93'). El resultado se verá en consola.");
-        arrayFiltrado = productos.filter(producto => producto.modelo.includes(palabraFiltrada));
-        break;
-    case 'EDAD':
-        palabraFiltrada = prompt("Ingrese la edad que desea buscar ('ADULTO' o 'KIDS') . El resultado se verá en consola.");
-        arrayFiltrado = productos.filter(producto => producto.rangoEdad.includes(palabraFiltrada));
-        break;
-    case 'DEPORTE':
-        palabraFiltrada = prompt("Ingrese el deporte que desea buscar.('SKI' o 'SNOWBOARD') El resultado se verá en consola.");
-        arrayFiltrado = productos.filter(producto => producto.deporte.includes(palabraFiltrada));
-        break;
-    default:
-        console.log('Categoría no válida');
-}
-
-console.log(arrayFiltrado);
-
-//NOTA: el filtrado o busqueda probablemente se haga en pantalla con algo parecido a un formulario o solapas, 
-// los ejemplos son solo a modo ilustrativos para el simulador mediante PROMPTS.
-
-
-//productos que habria que reponer(quedan menos de 3 unidades) 
-for (let producto of productos) {
-    if (producto.stock < 3) {
-        console.log(`Quedan solo ${producto.stock} unidades de ${producto.marca} ${producto.modelo}. Por favor reponer.`);
-    }
-}
-
-//Esto puede usarse tanto para el vendedor como para alertar al usuario que quedan pocas unidades.
-
-
-// Lo siguiente es el codigo usado en la primer pre entrega. En esta instancia no es necesario usarlo pero puede reutilizarse 
-// hacia el final para calcular el medio de pago, o como herramienta para el usuario.
-
-// // Funcion para calcular el precio total del producto ajustado a inflacion.
-
-// function calcularPrecioAjustadoPorInflacion( precioCuota, numeroCuotas, tasaInflacionMensual ){
-//     let precioTotalAjustado=0
-//     //en este ciclo for, el valor de i representa a cada cuota)
-//     for (let i=1; i<=numeroCuotas; i++){
-//         let precioCuotaAjustada=precioCuota /Math.pow (1+ (tasaInflacionMensual /100), i)
-//         precioTotalAjustado+=precioCuotaAjustada
-//     }
-//     return precioTotalAjustado
-//   }
-  
-//   //Primer alert para explicar como funciona
-  
-//   alert('Bienvenido a Infla2. Con esta herramienta vas a poder ver si te conviene pagar al contado o en cuotas. El resultado se vera en un console.log()')
-  
-//   // creo variables que ingresa el usuario por prompt
-  
-//   let precioCuota=prompt('Ingresa el precio de cada cuota fija.')
-//   let numeroCuotas=prompt('Ingresa el numero de cuotas.')
-//   let precioEnEfectivo=prompt('Ingresa el precio en efectivo')
-//   let tasaInflacionMensual=9
-  
-//   console.log('La inflacion mensual estimada es de '+ tasaInflacionMensual + '%.')
-//   console.log('El precio en efectivo es de '+ precioEnEfectivo + ' pesos.')
-  
-//   //creo una nueva variable donde llamo la funcion para finalmente mostrarla con console.log
-  
-//   let precioTotalAjustadoPorInflacion= calcularPrecioAjustadoPorInflacion(precioCuota,numeroCuotas,tasaInflacionMensual)
-  
-//   console.log('El precio total en cuotas ajustado por inflacion es de '+ precioTotalAjustadoPorInflacion.toFixed(2) + ' pesos.') //uso toFixed(2) para que me muestre 2 decimales.
-  
-//   //veo q me conviene 
-  
-//   if (precioEnEfectivo<precioTotalAjustadoPorInflacion){
-//       console.log('Te conviene pagar en efectivo')
-//   } else if(precioEnEfectivo>precioTotalAjustadoPorInflacion){
-//       console.log('Te conviene pagar en cuotas')
-//   } else{
-//       console.log('Error. Ingresa los datos nuevamente.')
-//   }
-  
-  
-  
+//codigo para mostrar todos los productos al cargar la página
+mostrarProductos(productos);
+mostrarOpcionesMarcas();
+mostrarOpcionesEdad();
