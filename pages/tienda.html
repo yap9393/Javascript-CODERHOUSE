@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,8 +55,9 @@
               <div id="productosCarrito">
               </div>
               <div class="carrito-total">
-                <span class="total-label">Total:</span>
-                <span class="total-precio">$0.00</span>
+                <span class="total-label m-3">Total:</span>
+                <span class="total-precio m-3">$0.00</span>
+                <span> <button type="button" class="comprar btn btn-warning ">Comprar</button></span>
               </div>
             </div>
           </div>
@@ -103,31 +105,44 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
-          <h1 class="carouselContent tituloPpal ">Tienda</h1>
+          <h1 class="carouselContent tituloPpal">Tienda</h1>
         </div>
       </div>
     </div>
     <h2 class="fondoAmarillo sticky-heading">Tienda</h2>
+    <div class="loader" id="loader"></div>
     <div class="container">
       <div class="row side-section-row">
-        <div class="col-sm-12 col-md-3  justify-content-start">
-          <div class="sidebar align-self-start">
-            <button type="button" class="btn btn-secondary mostrar-todo">
-              Mostrar todo
-            </button>
-            <button type="button" class="btn btn-primary ordenar-precio">Ordenar por precio</button>
-            <h3>Marcas:</h3>
-            <ul id="marcaSidebar">
-              <!-- marcas-->
-            </ul>
-            <h3>Rango de edad:</h3>
-            <ul id="edadSidebar">
-              <!-- edades -->
-            </ul>
+        <div class="col-sm-12 col-md-3 justify-content-start">
+          <div class="sidebar align-self-start p-3">
+            <button type="button" class="btn btn-secondary mb-3 mostrar-todo btn-warning">Mostrar todo</button>
+            <button type="button" class="btn btn-primary mb-3 ordenar-precio">Ordenar por precio</button>
+            <hr>
+            <div class="mb-3">
+              <label for="marcaSidebar" class="form-label">Marcas:</label>
+              <select class="form-select" id="marcaSidebar" name="marca">
+                <option value="">Todas las marcas</option>
+                <!-- las opciones de marca se agregan aca -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="deporteDropdown" class="form-label">Deporte:</label>
+              <select class="form-select" id="deporteSidebar" name="deporte">
+                <option value="">Todos los deportes</option>
+                <!-- Las opciones de deportes se agregan aca -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="edadDropdown" class="form-label">Rango de edad:</label>
+              <select class="form-select" id="edadSidebar" name="edad">
+                <option value="">Todas las edades</option>
+                <!-- Las opciones de rango de edad se agregan aca -->
+              </select>
+            </div>
           </div>
         </div>
         <div class="col-sm-12 col-md-9" id="contenedorDeProductos">
-          <!-- productos -->
+          <!-- Los productos se muestran aca-->
         </div>
       </div>
     </div>

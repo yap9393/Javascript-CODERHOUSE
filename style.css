@@ -467,7 +467,7 @@ input[type="submit"] {
 
 /* tienda */
 .sidebar {
-  background-color: #f8f9fa;
+  background-color: #ececec;
   padding: 10px;
   left: 20px;  
   justify-items: end;
@@ -504,3 +504,35 @@ input[type="submit"] {
 .carrito{
 margin-left: 5px;
 }
+
+.card {
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+
+/* loader */
+.loader{
+  border:16px solid white;
+  border-radius: 50%;
+  border-top:16px solid #3498db;
+  width:80px;
+  height:80px;
+  animation:spin 2s linear infinite;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+@keyframes spin{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+
+

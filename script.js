@@ -2,7 +2,8 @@ let valorDolar = 1
 //se establecio valor de dolar 1 solo para tener numeros mas chicos en el simulador.
 
 class Producto {
-    constructor( marca, modelo, rangoEdad, deporte, tamanio, precio, stock,imagen, alt) {
+    constructor(id, marca, modelo, rangoEdad, deporte, tamanio, precio, stock, imagen, alt) {
+        this.id=id;
         this.marca = marca;
         this.modelo = modelo;
         this.rangoEdad = rangoEdad;
@@ -11,7 +12,7 @@ class Producto {
         this.precio = parseFloat(precio);
         this.stock = parseFloat(stock);
         this.imagen=imagen;
-        this.alt='esquies';
+        this.alt=alt;
     }
     precioEnPesos() {
         return this.precio * valorDolar;
@@ -26,21 +27,6 @@ class Producto {
 
 const productos = [];
 
-const producto1 = new Producto("Rossignol", "Escaper", "Adulto", "Ski", "160cm", 450, 6, "../Assets/imagenes tienda/modelorossignolescaper.jpg");
-const producto2 = new Producto("K2", "Mindbender", "Adulto", "Ski", "185cm", 550, 2,  "../Assets/imagenes tienda/modelok2mindbender.jpg");
-const producto3 = new Producto("Head", "Kore93", "Adulto", "Ski", "190cm", 600, 2,  "../Assets/imagenes tienda/modeloheadkore93 (1).jpg");
-const producto4 = new Producto("Blizzard", "Brahma", "Adulto", "Ski", "188cm", 520, 3, "../Assets/imagenes tienda/modeloblizzardbrahma.jpg");
-const producto5 = new Producto("Armada", "Declivity", "Adulto", "Ski", "198cm", 480, 3,  "../Assets/imagenes tienda/modeloarmadadeclivity.jpg");
-const producto6= new Producto ("Black Crows", "Junius", "Niño", "Ski", "85cm", 180, 3,  "../Assets/imagenes tienda/modeloblackcrowsJunius.jpg");
-const producto7 = new Producto("Blizzard", "Bonafide", "Adulto", "Ski", "171cm", 524, 7, "../Assets/imagenes tienda/modeloblizzardbonifide.jpg");
-const producto8 = new Producto("Head", "Kore99", "Adulto", "Ski", "172cm", 630, 2,  "../Assets/imagenes tienda/modeloheadkore99.jpg", "esquies");
-const producto9 = new Producto("Volkl", "Revolt Jr Hopper ", "Niño", "Ski", "128cm", 350, 5,  "../Assets/imagenes tienda/modeloVolklRevolt .jpg");
-const producto10 = new Producto("Salomon", "QST Junior", "Niño", "Ski", "100cm", 390, 3,  "../Assets/imagenes tienda/modelosalomonqstjunior.jpg");
-const producto11 = new Producto("Salomon", "QST", "Adulto", "Ski", "185cm", 590, 6,  "../Assets/imagenes tienda/modelosalomonqst.jpg");
-
-productos.push(producto1, producto2, producto3, producto4, producto5, 
-  producto6, producto7, producto8, producto9, producto10, producto11);
-
 //mostrar productos en dom 
 let contenedorDeProductos = document.getElementById('contenedorDeProductos')
 
@@ -54,7 +40,7 @@ function mostrarProductos(arrayProductos) {
     contenedor.classList.add('col', 'col-sm-12', 'col-md-6', 'col-lg-4', 'col-xl-3');
     contenedor.innerHTML = `
       <div class="card h-100">
-        <img src="${producto.imagen}" class="card-img-top image-tienda" alt="${producto.alt}">
+        <img src="${producto.imagen}" class="card-img-top image-tienda" alt="${producto.deporte}">
         <div class="card-body">
           <h3 class="card-title">${producto.marca}</h3>
           <p class="card-text">${producto.modelo}</p>
@@ -87,52 +73,62 @@ function ordenarPorPrecioClick() {
 let botonMostrarTodo= document.querySelector('.mostrar-todo');
 botonMostrarTodo.addEventListener('click', mostrarTodo);
 
-// funcion para mostrar las opciones de marcas en la barra lateral
-let marcaSidebar = document.getElementById('marcaSidebar');
+//funcion unificada para mostrar todo en la barra lateral
+function mostrarOpcionesGenerales(opciones, dropdownId, opcionPorDefecto) {
+  let opcionesUnicas = [...new Set(productos.map(producto => producto[opciones]))];
+  const dropdown = document.getElementById(dropdownId);
+  dropdown.innerHTML = `<option value="">${opcionPorDefecto}</option>`; // Opcion por defecto
 
-function mostrarOpcionesMarcas() {
-  let marcasUnicas = [...new Set(productos.map(producto => producto.marca))];
-  marcaSidebar.innerHTML = '';
-  marcasUnicas.forEach(marca => {
-    let li = document.createElement('li'); 
-    li.innerText = marca; 
-    li.classList.add('marca-option');
-    marcaSidebar.appendChild(li);
+  opcionesUnicas.forEach(opcion => {
+    const option = document.createElement('option');
+    option.value = opcion;
+    option.textContent = opcion;
+    dropdown.appendChild(option);
   });
+  // Agregar evento change al dropdown
+  dropdown.addEventListener('change', respuestaClick);
+}
+
+//funciones para aplicar y apilar los filtros
+const filtrosSeleccionados = {
+  marca: '',
+  rangoEdad: '',
+  deporte: '',
 };
 
-// funcion para mostrar las opciones de rango de edad en la barra lateral
-let edadSidebar = document.getElementById('edadSidebar');
+function aplicarFiltros() {
+  const { marca, rangoEdad, deporte } = filtrosSeleccionados;
 
-function mostrarOpcionesEdad() {
-  let edadesUnicas = [...new Set(productos.map(producto => producto.rangoEdad))];
-  edadSidebar.innerHTML = '';
-  edadesUnicas.forEach(edad => {
-    let li = document.createElement('li');
-    li.innerText = edad;
-    li.classList.add('edad-option');
-    edadSidebar.appendChild(li);
-  });
-};
+  let arrayFiltrado = productos.filter(producto =>
+    (marca === '' || producto.marca.toLowerCase() === marca.toLowerCase()) &&
+    (rangoEdad === '' || producto.rangoEdad.toLowerCase() === rangoEdad.toLowerCase()) &&
+    (deporte === '' || producto.deporte.toLowerCase() === deporte.toLowerCase())
+  );
 
-// funcion para manejar los clics en las opciones de filtrado
-marcaSidebar.addEventListener('click', respuestaClick);
-edadSidebar.addEventListener('click', respuestaClick);
+  mostrarProductos(arrayFiltrado);
+} 
+
+// funcion para manejar los clicks en las opciones de filtrado
+marcaSidebar.addEventListener('change', respuestaClick);
+edadSidebar.addEventListener('change', respuestaClick);
+deporteSidebar.addEventListener('change', respuestaClick);
 
 function respuestaClick(event) {
-  let opcion = event.target.textContent; //consigo el texto del elemento que clickeo
-  let filtro = event.target.parentNode.id; //consigo el id del elemento padre (para saber si filtro x marca o edad)
+  let opcion = event.target.options[event.target.selectedIndex].value; // obtener el valor seleccionado en el dropdown
+  let filtro = event.target.id; // obtener el ID del dropdown
 
   if (filtro === 'marcaSidebar') {
-    let arrayFiltrado = productos.filter(producto => producto.marca.toLowerCase() === opcion.toLowerCase());
-    mostrarProductos(arrayFiltrado);
+    filtrosSeleccionados.marca = opcion;
   } else if (filtro === 'edadSidebar') {
-    let arrayFiltrado = productos.filter(producto => producto.rangoEdad.toLowerCase() === opcion.toLowerCase());
-    mostrarProductos(arrayFiltrado);
+    filtrosSeleccionados.rangoEdad = opcion;
+  } else if (filtro === 'deporteSidebar') {
+    filtrosSeleccionados.deporte = opcion;
   }
-};
+  aplicarFiltros();
+}
 
-// carrito
+// Carrito
+
 // funciones para obtener y guardar el carrito en el Local Storage.
 let carrito = [];
 function getCarritoFromLocalStorage() {
@@ -201,12 +197,12 @@ function mostrarCarrito(arrayCarrito) {
     const productoElement = document.createElement('div');
     productoElement.classList.add('carrito-item');
     productoElement.innerHTML = `
-      <span class="nombre">${producto.nombre}</span>
-      <span class="modelo">${producto.modelo} </span>
-      <span>|</span>
-      <span class="cantidad"> x ${producto.cantidad} </span>
-      <span>|</span>
-      <span class="precio"> $${(producto.precioVenta * producto.cantidad).toFixed(2)}</span>
+      <span class="nombre m-1">${producto.nombre}</span>
+      <span class="modelo m-1">${producto.modelo} </span>
+      <span></span>
+      <span class="cantidad m-1"> x ${producto.cantidad} </span>
+      <span></span>
+      <span class="precio m-1"> $${(producto.precioVenta * producto.cantidad).toFixed(2)}</span>
       <button class="btn btn-danger btn-eliminar" data-nombre="${producto.nombre}">Eliminar</button>
     `;
 
@@ -218,7 +214,6 @@ function mostrarCarrito(arrayCarrito) {
     productosCarritoContainer.appendChild(productoElement);
     totalCarrito += producto.precioVenta * producto.cantidad;
   };
-
   //mostrar total del carrito
   document.querySelector('.total-precio').textContent = `$${totalCarrito.toFixed(2)}`;
 };
@@ -230,7 +225,61 @@ document.addEventListener('DOMContentLoaded', () => {
   mostrarCantidadCarrito();
 });
 
-//codigo para mostrar todos los productos al cargar la página
-mostrarProductos(productos);
-mostrarOpcionesMarcas();
-mostrarOpcionesEdad();
+//fetch desde el JSON
+const pedirProductosaBD = async () => {
+  try {
+    const loader = document.getElementById('loader');
+    loader.style.display = 'block'; // mostrar el loader antes de la carga de productos
+    await new Promise(resolve => setTimeout(resolve, 1500)); //promesra para simular la caga de productos por 1.5 segs
+    const response = await fetch('../data.json'); //pido la data a mi JSON
+    const data = await response.json(); 
+    productos.push(...data.map(item => new Producto(
+      item.id,
+      item.marca,
+      item.modelo,
+      item.rangoEdad,
+      item.deporte,
+      item.tamanio,
+      item.precio,
+      item.stock,
+      item.imagen,
+      item.alt
+    )));
+
+    mostrarProductos(productos);
+    mostrarOpcionesGenerales('deporte', 'deporteSidebar', 'Todos los deportes');
+    mostrarOpcionesGenerales('marca', 'marcaSidebar', 'Todas las marcas');
+    mostrarOpcionesGenerales('rangoEdad', 'edadSidebar', 'Todas las edades');
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loader.style.display = 'none'; 
+  }
+};
+
+pedirProductosaBD();
+
+//boton comprar y vaciar carrito
+const botonComprar = document.querySelector('.comprar');
+botonComprar.addEventListener('click', comprarClick);
+
+function comprarClick() {
+  if (carrito.length === 0) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Su carrito está vacío',
+      text: 'Agregue productos al carrito',
+    });
+  } else {
+    Swal.fire({
+      icon: 'success',
+      title: 'Compra exitosa',
+      text: 'Gracias por tu compra',
+    });
+
+    carrito = [];
+    guardarCarritoEnLS();
+    mostrarCarrito(carrito);
+    mostrarCantidadCarrito();
+  }
+}
